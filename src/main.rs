@@ -1,8 +1,11 @@
+#![windows_subsystem="windows"]
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 use fltk::{app, prelude::*, window::Window, button::Button, input::Input};
 use fltk::enums::Color;
 use fltk::frame::Frame;
 use fltk_theme::{WidgetTheme, widget_themes, ThemeType};
-
+use regex::Regex;
 
 fn main() {
     let app = app::App::default();
@@ -16,10 +19,83 @@ fn main() {
 
     win.set_color(Color::from_u32(0xffebee));
 
-    let (_, _textboxs) = Adder::new(); // Получаем контролы
+
+    let (_, textboxs, mut btn) = Adder::new(); // Получаем контролы
+
+    // Регулярка
+    let re = Regex::new(r"50.00;1-\(([12XХхx])\);2-\(([12XХхx])\);3-\(([12XХхx])\);4-\(([12XХхx])\);5-\(([12XХхx])\);6-\(([12XХхx])\);7-\(([12XХхx])\);8-\(([12XХхx])\);9-\(([12XХхx])\);10-\(([12XХхx])\);11-\(([12XХхx])\);12-\(([12XХхx])\);13-\(([12XХхx])\);14-\(([12XХхx])\);15-\(([12XХхx])\)")
+        .unwrap();
+
+    // Считываем исходные данные из файла
+    let path = "source.txt";
+    let f = File::open(path);
+
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => panic!("Не удалось открыть файл: {:?}", error),
+    };
+
+    let buffered = BufReader::new(f);
+
+    let mut goals: Vec<(String, String, String, String, String, String, String, String, String, String, String, String, String, String, String)> = Vec::new();
+
+    for line in buffered.lines() {
+        let line = &line.unwrap();
+        for cap in re.captures_iter(line) {
+            goals.push((cap[1].to_string(), cap[2].to_string(), cap[3].to_string(), cap[4].to_string(), cap[5].to_string(), cap[6].to_string(), cap[7].to_string(),
+                cap[8].to_string(), cap[9].to_string(), cap[10].to_string(), cap[11].to_string(), cap[12].to_string(), cap[13].to_string(), cap[14].to_string(), cap[15].to_string()));
+        }
+    }
 
     win.end();
     win.show();
+
+    btn.set_callback(move |_| {
+        let c1: String = textboxs[0].value();
+        let c2: String = textboxs[1].value();
+        let c3: String = textboxs[2].value();
+        let c4: String = textboxs[3].value();
+        let c5: String = textboxs[4].value();
+        let c6: String = textboxs[5].value();
+        let c7: String = textboxs[6].value();
+        let c8: String = textboxs[7].value();
+        let c9: String = textboxs[8].value();
+        let c10: String = textboxs[9].value();
+        let c11: String = textboxs[10].value();
+        let c12: String = textboxs[11].value();
+        let c13: String = textboxs[12].value();
+        let c14: String = textboxs[13].value();
+        let c15: String = textboxs[14].value();
+
+        let mut n_str = 0;
+        let mut number_of_coincidences = 0;
+
+        for goal in &goals {
+
+            if goal.0 == c1 { number_of_coincidences += 1; }
+            if goal.1 == c2 { number_of_coincidences += 1; }
+            if goal.2 == c3 { number_of_coincidences += 1; }
+            if goal.3 == c4 { number_of_coincidences += 1; }
+            if goal.4 == c5 { number_of_coincidences += 1; }
+            if goal.5 == c6 { number_of_coincidences += 1; }
+            if goal.6 == c7 { number_of_coincidences += 1; }
+            if goal.7 == c8 { number_of_coincidences += 1; }
+            if goal.8 == c9 { number_of_coincidences += 1; }
+            if goal.9 == c10 { number_of_coincidences += 1; }
+            if goal.10 == c11 { number_of_coincidences += 1; }
+            if goal.11 == c12 { number_of_coincidences += 1; }
+            if goal.12 == c13 { number_of_coincidences += 1; }
+            if goal.13 == c14 { number_of_coincidences += 1; }
+            if goal.14 == c15 { number_of_coincidences += 1; }
+
+            if number_of_coincidences >= 9 { n_str += 1; }
+            number_of_coincidences = 0;
+        }
+
+        win.set_label(&format!("{}", n_str));
+
+
+    });
     app.run().unwrap();
 }
 
@@ -31,7 +107,7 @@ const WIDGET_WIDTH: i32 = 30;
 struct Adder {}
 
 impl Adder {
-    fn new() -> (Self, Vec::<Input>) {
+    fn new() -> (Self, Vec::<Input>, Button) {
         let mut textboxs = Vec::<Input>::new();
 
         let count1 = Input::new(20, 35, WIDGET_WIDTH, WIDGET_HEIGHT, "");
@@ -97,7 +173,8 @@ impl Adder {
 
         let mut btn = Button::new(20, 80, 590, 100, "Проверить");
         btn.set_frame(widget_themes::OS_DEFAULT_BUTTON_UP_BOX);
+        let btn = btn;
 
-        (Adder {}, textboxs)
+        (Adder {}, textboxs, btn)
     }
 }

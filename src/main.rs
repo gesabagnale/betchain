@@ -1,4 +1,5 @@
 use fltk::{app, prelude::*, window::Window, button::Button, input::Input};
+use fltk::enums::Color;
 use fltk::frame::Frame;
 use fltk_theme::{WidgetTheme, widget_themes, ThemeType};
 
@@ -12,6 +13,8 @@ fn main() {
         .center_screen();
     let widget_theme = WidgetTheme::new(ThemeType::AquaClassic);
     widget_theme.apply();
+
+    win.set_color(Color::from_u32(0xffebee));
 
     let (_, _textboxs) = Adder::new(); // Получаем контролы
 

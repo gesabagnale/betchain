@@ -1,0 +1,9 @@
+[package]
+name = "xbet"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fltk = { version = "1.2.19", features = ["fltk-bundled"] }
+fltk-theme = "0.4.2"
+

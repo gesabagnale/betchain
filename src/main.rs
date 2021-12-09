@@ -1,4 +1,3 @@
-#![windows_subsystem="windows"]
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use fltk::{app, prelude::*, window::Window, button::Button, input::Input};
@@ -12,7 +11,7 @@ fn main() {
 
     let mut win = Window::default()
         .with_size(WIN_WIDTH, WIN_HEIGHT)
-        .with_label("Большие ставки - большие выигрыши!")
+        .with_label("Большие ставки – большие выигрыши!")
         .center_screen();
     let widget_theme = WidgetTheme::new(ThemeType::AquaClassic);
     widget_theme.apply();
@@ -20,58 +19,81 @@ fn main() {
     win.set_color(Color::from_u32(0xffebee));
 
 
-    let (_, textboxs, mut btn) = Adder::new(); // Получаем контролы
-
-    // Регулярка
-    let re = Regex::new(r"50.00;1-\(([12XХхx])\);2-\(([12XХхx])\);3-\(([12XХхx])\);4-\(([12XХхx])\);5-\(([12XХхx])\);6-\(([12XХхx])\);7-\(([12XХхx])\);8-\(([12XХхx])\);9-\(([12XХхx])\);10-\(([12XХхx])\);11-\(([12XХхx])\);12-\(([12XХхx])\);13-\(([12XХхx])\);14-\(([12XХхx])\);15-\(([12XХхx])\)")
-        .unwrap();
-
-    // Считываем исходные данные из файла
-    let path = "source.txt";
-    let f = File::open(path);
-
-    let f = match f {
-        Ok(file) => file,
-        Err(error) => panic!("Не удалось открыть файл: {:?}", error),
-    };
-
-    let buffered = BufReader::new(f);
-
-    let mut goals: Vec<(String, String, String, String, String, String, String, String, String, String, String, String, String, String, String)> = Vec::new();
-
-    for line in buffered.lines() {
-        let line = &line.unwrap();
-        for cap in re.captures_iter(line) {
-            goals.push((cap[1].to_string(), cap[2].to_string(), cap[3].to_string(), cap[4].to_string(), cap[5].to_string(), cap[6].to_string(), cap[7].to_string(),
-                cap[8].to_string(), cap[9].to_string(), cap[10].to_string(), cap[11].to_string(), cap[12].to_string(), cap[13].to_string(), cap[14].to_string(), cap[15].to_string()));
-        }
-    }
+    let (_, inputs, mut btn) = Adder::new(); // Получаем контролы
 
     win.end();
     win.show();
 
     btn.set_callback(move |_| {
-        let c1: String = textboxs[0].value();
-        let c2: String = textboxs[1].value();
-        let c3: String = textboxs[2].value();
-        let c4: String = textboxs[3].value();
-        let c5: String = textboxs[4].value();
-        let c6: String = textboxs[5].value();
-        let c7: String = textboxs[6].value();
-        let c8: String = textboxs[7].value();
-        let c9: String = textboxs[8].value();
-        let c10: String = textboxs[9].value();
-        let c11: String = textboxs[10].value();
-        let c12: String = textboxs[11].value();
-        let c13: String = textboxs[12].value();
-        let c14: String = textboxs[13].value();
-        let c15: String = textboxs[14].value();
+        let re = Regex::new(r"50.00;1-\(([12XХхx])\);2-\(([12XХхx])\);3-\(([12XХхx])\);4-\(([12XХхx])\);5-\(([12XХхx])\);6-\(([12XХхx])\);7-\(([12XХхx])\);8-\(([12XХхx])\);9-\(([12XХхx])\);10-\(([12XХхx])\);11-\(([12XХхx])\);12-\(([12XХхx])\);13-\(([12XХхx])\);14-\(([12XХхx])\);15-\(([12XХхx])\)")
+            .unwrap();
 
-        let mut n_str = 0;
+        let goals = read_data(re); // вектор кортежей исходов
+        let mut c1: String = inputs[0].value();
+        if c1 == "X" || c1 == "x" || c1 == "Х" || c1 == "х" {
+            c1 = "X".to_string();
+        }
+        let mut c2: String = inputs[1].value();
+        if c2 == "X" || c2 == "x" || c2 == "Х" || c2 == "х" {
+            c2 = "X".to_string();
+        }
+        let mut c3: String = inputs[2].value();
+        if c3 == "X" || c3 == "x" || c3 == "Х" || c3 == "х" {
+            c3 = "X".to_string();
+        }
+        let mut c4: String = inputs[3].value();
+        if c4 == "X" || c4 == "x" || c4 == "Х" || c4 == "х" {
+            c4 = "X".to_string();
+        }
+        let mut c5: String = inputs[4].value();
+        if c5 == "X" || c5 == "x" || c5 == "Х" || c5 == "х" {
+            c5 = "X".to_string();
+        }
+        let mut c6: String = inputs[5].value();
+        if c6 == "X" || c6 == "x" || c6 == "Х" || c6 == "х" {
+            c6 = "X".to_string();
+        }
+        let mut c7: String = inputs[6].value();
+        if c7 == "X" || c7 == "x" || c7 == "Х" || c7 == "х" {
+            c7 = "X".to_string();
+        }
+        let mut c8: String = inputs[7].value();
+        if c8 == "X" || c8 == "x" || c8 == "Х" || c8 == "х" {
+            c8 = "X".to_string();
+        }
+        let mut c9: String = inputs[8].value();
+        if c9 == "X" || c9 == "x" || c9 == "Х" || c9 == "х" {
+            c9 = "X".to_string();
+        }
+        let mut c10: String = inputs[9].value();
+        if c10 == "X" || c10 == "x" || c10 == "Х" || c10 == "х" {
+            c10 = "X".to_string();
+        }
+        let mut c11: String = inputs[10].value();
+        if c11 == "X" || c11 == "x" || c11 == "Х" || c11 == "х" {
+            c11 = "X".to_string();
+        }
+        let mut c12: String = inputs[11].value();
+        if c12 == "X" || c12 == "x" || c12 == "Х" || c12 == "х" {
+            c12 = "X".to_string();
+        }
+        let mut c13: String = inputs[12].value();
+        if c13 == "X" || c13 == "x" || c13 == "Х" || c13 == "х" {
+            c13 = "X".to_string();
+        }
+        let mut c14: String = inputs[13].value();
+        if c14 == "X" || c14 == "x" || c14 == "Х" || c14 == "х" {
+            c14 = "X".to_string();
+        }
+        let mut c15: String = inputs[14].value();
+        if c15 == "X" || c15 == "x" || c15 == "Х" || c15 == "х" {
+            c15 = "X".to_string();
+        }
+
         let mut number_of_coincidences = 0;
-
-        for goal in &goals {
-
+        let mut n_str = 0; // номер строки в которой > 9 совпадений
+        let mut numbers_str = Vec::<(usize, i32)>::new();
+        for (i, goal) in goals.iter().enumerate() {
             if goal.0 == c1 { number_of_coincidences += 1; }
             if goal.1 == c2 { number_of_coincidences += 1; }
             if goal.2 == c3 { number_of_coincidences += 1; }
@@ -88,13 +110,31 @@ fn main() {
             if goal.13 == c14 { number_of_coincidences += 1; }
             if goal.14 == c15 { number_of_coincidences += 1; }
 
-            if number_of_coincidences >= 9 { n_str += 1; }
+            if number_of_coincidences >= 9 {
+                n_str += 1;
+                numbers_str.push((i+1, number_of_coincidences));
+            }
             number_of_coincidences = 0;
         }
 
-        win.set_label(&format!("{}", n_str));
+        //win.set_label(&format!("{}", n_str));
 
+        clearscreen::clear().expect("не удалось очистить консоль");
+        if numbers_str.len() == 0 {
+            println!("Нет совпадений");
+        }
+        for (n, counts) in &numbers_str {
+            println!("{} совпадений в строке №{}", counts, n);
+        }
 
+        if numbers_str.len() > 0 {
+            println!();
+        }
+        for i in 9..16 {
+            if numbers_str.iter().filter(|n| n.1 == i).count() > 0 {
+                println!("Число строк, в кот. совпали {} исходов: {}", i, numbers_str.iter().filter(|n| n.1 == i).count());
+            }
+        }
     });
     app.run().unwrap();
 }
@@ -107,8 +147,8 @@ const WIDGET_WIDTH: i32 = 30;
 struct Adder {}
 
 impl Adder {
-    fn new() -> (Self, Vec::<Input>, Button) {
-        let mut textboxs = Vec::<Input>::new();
+    fn new() -> (Self, Vec<Input>, Button) {
+        let mut inputs = Vec::<Input>::new();
 
         let count1 = Input::new(20, 35, WIDGET_WIDTH, WIDGET_HEIGHT, "");
         let _ = Frame::new(20, 10, WIDGET_WIDTH, WIDGET_HEIGHT, "1");
@@ -155,26 +195,49 @@ impl Adder {
         let count15 = Input::new(20+WIDGET_WIDTH*14 + 10*14, 35, WIDGET_WIDTH, WIDGET_HEIGHT, "");
         let _ = Frame::new(20+WIDGET_WIDTH*14 + 10*14, 10, WIDGET_WIDTH, WIDGET_HEIGHT, "15");
 
-        textboxs.push(count1);
-        textboxs.push(count2);
-        textboxs.push(count3);
-        textboxs.push(count4);
-        textboxs.push(count5);
-        textboxs.push(count6);
-        textboxs.push(count7);
-        textboxs.push(count8);
-        textboxs.push(count9);
-        textboxs.push(count10);
-        textboxs.push(count11);
-        textboxs.push(count12);
-        textboxs.push(count13);
-        textboxs.push(count14);
-        textboxs.push(count15);
+        inputs.push(count1);
+        inputs.push(count2);
+        inputs.push(count3);
+        inputs.push(count4);
+        inputs.push(count5);
+        inputs.push(count6);
+        inputs.push(count7);
+        inputs.push(count8);
+        inputs.push(count9);
+        inputs.push(count10);
+        inputs.push(count11);
+        inputs.push(count12);
+        inputs.push(count13);
+        inputs.push(count14);
+        inputs.push(count15);
 
         let mut btn = Button::new(20, 80, 590, 100, "Проверить");
         btn.set_frame(widget_themes::OS_DEFAULT_BUTTON_UP_BOX);
         let btn = btn;
 
-        (Adder {}, textboxs, btn)
+        (Adder {}, inputs, btn)
     }
+}
+
+fn read_data(re: Regex) -> Vec<(String, String, String, String, String, String, String, String, String, String, String, String, String, String, String)> {
+    let path = "source.txt";
+    let f = File::open(path);
+
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => panic!("Не удалось открыть файл: {:?}", error),
+    };
+
+    let buffered = BufReader::new(f);
+
+    let mut goals: Vec<(String, String, String, String, String, String, String, String, String, String, String, String, String, String, String)> = Vec::new();
+
+    for line in buffered.lines() {
+        let line = &line.unwrap();
+        for cap in re.captures_iter(line) {
+            goals.push((cap[1].to_string(), cap[2].to_string(), cap[3].to_string(), cap[4].to_string(), cap[5].to_string(), cap[6].to_string(), cap[7].to_string(),
+                        cap[8].to_string(), cap[9].to_string(), cap[10].to_string(), cap[11].to_string(), cap[12].to_string(), cap[13].to_string(), cap[14].to_string(), cap[15].to_string()));
+        }
+    }
+    goals
 }

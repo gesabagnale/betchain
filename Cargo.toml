@@ -1,11 +1,10 @@
 [package]
-name = "xbet"
-version = "0.1.0"
+name = "betchain"
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-clearscreen = "1.0.9"
-fltk = { version = "1.2.19", features = ["fltk-bundled"] }
+clearscreen = "1.0.10"
+fltk = { version = "1.3.8", features = ["fltk-bundled"] }
 fltk-theme = "0.4.2"
-regex = "1.5.4"
-
+regex = "1.5.6"
